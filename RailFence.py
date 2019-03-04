@@ -27,6 +27,62 @@ def encrypt(levels, word):
     return encrypted.replace("\u0000", "")
 
 
+def encrypt2(key, word):
+    encrypted = ''
+    for level in range(key):
+        pos = level
+        encrypted += word[pos]
+        while True:
+            leap = 2 * (key - 1) - 2 * level
+            if leap != 0:
+                pos += leap
+                if pos >= len(word):
+                    break
+                encrypted += word[pos]
+
+            leap = 2 * (key - 1) - 2 * (key - 1 - level)
+            if leap > 0:
+                pos += leap
+                if pos >= len(word):
+                    break
+                encrypted += word[pos]
+    return encrypted
+
+
+def decrypt2(key, word):
+    encrypted = '0' * len(word)
+    for level in range(key):
+        pos = level
+        temp = list(encrypted)
+        temp[pos] = word[0]
+        encrypted = "".join(temp)
+        if len(word) > 0:
+            word = word[1:]
+        while True:
+            leap = 2 * (key - 1) - 2 * level
+            if leap != 0:
+                pos += leap
+                if pos >= len(encrypted):
+                    break
+                temp = list(encrypted)
+                temp[pos] = word[0]
+                encrypted = "".join(temp)
+                if len(word) > 0:
+                    word = word[1:]
+
+            leap = 2 * (key - 1) - 2 * (key - 1 - level)
+            if leap > 0:
+                pos += leap
+                if pos >= len(encrypted):
+                    break
+                temp = list(encrypted)
+                temp[pos] = word[0]
+                encrypted = "".join(temp)
+                if len(word) > 0:
+                    word = word[1:]
+    return encrypted
+
+
 def decrypt(levels, word):
     table = []
     decrypted = ''
@@ -87,8 +143,27 @@ def decrypt(levels, word):
 
 
 def main():
-    print(encrypt(4, "ALA_MA_KOTA"))
-    decrypt(4, "A_LAKAMOA_T")
+    m = 10
+    i = 0
+    j = 0
+    for k in range(2, m):
+        try:
+            print("\nOn tables")
+            out = (encrypt(k, "ALA_MA_KOTA"))
+            print(out)
+            out = decrypt(k, out)
+            print(out)
+        except IndexError:
+            i += 1
+        try:
+            print("\nOn math")
+            out = (encrypt2(k, "ALA_MA_KOTA"))
+            print(out)
+            out = decrypt2(k, out)
+            print(out)
+        except IndexError:
+            j += 1
+    print("I: {}, J: {}".format(i, j))
 
 
 if __name__ == '__main__':
