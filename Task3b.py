@@ -33,6 +33,8 @@ def decrypt(word, n, k1, k0, fn):
 def main():
     print(encrypt('CRYPTOGRAPHY', 21, 5, 4))
     print(decrypt('OFTQPLNFEQST', 21, 5, 4, 12))
+    print(encrypt('CRYPTOGRAPHY', 26, 7, 5))
+    print(decrypt('TURGIZVUFGCR', 26, 7, 5, 12))
 
 
 if __name__ == '__main__':
