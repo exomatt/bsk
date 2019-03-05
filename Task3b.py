@@ -1,5 +1,14 @@
+import math
 import string
 from math import gcd
+
+
+def phi(n):
+    amount = 0
+    for k in range(1, n + 1):
+        if math.gcd(n, k) == 1:
+            amount += 1
+    return amount
 
 
 def coprime(a, b):
@@ -18,12 +27,12 @@ def encrypt(word, n, k1, k0):
         return 'Error'
 
 
-def decrypt(word, n, k1, k0, fn):
+def decrypt(word, n, k1, k0):
     if coprime(k1, n) and coprime(k0, n):
         decrypted = ''
         alphabet = string.ascii_uppercase
         for letter in word:
-            decrypted_letter = (((ord(letter) - 65) + (n - k0))*(k1 ** (fn - 1))) % n
+            decrypted_letter = (((ord(letter) - 65) + (n - k0)) * (k1 ** (phi(n) - 1))) % n
             decrypted += alphabet[decrypted_letter]
         return decrypted
     else:
@@ -31,10 +40,8 @@ def decrypt(word, n, k1, k0, fn):
 
 
 def main():
-    print(encrypt('CRYPTOGRAPHY', 21, 5, 4))
-    print(decrypt('OFTQPLNFEQST', 21, 5, 4, 12))
     print(encrypt('CRYPTOGRAPHY', 26, 7, 5))
-    print(decrypt('TURGIZVUFGCR', 26, 7, 5, 12))
+    print(decrypt('TURGIZVUFGCR', 26, 7, 5))
 
 
 if __name__ == '__main__':
