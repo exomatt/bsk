@@ -16,6 +16,9 @@ def coprime(a, b):
 
 
 def encrypt(word, n, k1, k0):
+    n = int(n)
+    k1 = int(k1)
+    k0 = int(k0)
     if coprime(k1, n) and coprime(k0, n):
         encrypted = ''
         alphabet = string.ascii_uppercase
@@ -28,6 +31,9 @@ def encrypt(word, n, k1, k0):
 
 
 def decrypt(word, n, k1, k0):
+    n = int(n)
+    k1 = int(k1)
+    k0 = int(k0)
     if coprime(k1, n) and coprime(k0, n):
         decrypted = ''
         alphabet = string.ascii_uppercase
@@ -37,6 +43,10 @@ def decrypt(word, n, k1, k0):
         return decrypted
     else:
         return 'Error'
+
+
+def __str__():
+    return "Ceasar B"
 
 
 def main():

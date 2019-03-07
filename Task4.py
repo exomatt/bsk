@@ -33,10 +33,14 @@ def decrypt(word, key):
     return decrypted
 
 
-def main():
-    print(encrypt('CRYPTOGRAPHY', 'BREAKBREAKBR'))
-    print(decrypt('DICPDPXVAZIP', 'BREAKBREAKBR'))
+def __str__():
+    return "Vigenere’a"
 
 
-if __name__ == '__main__':
-    main()
+# def main():
+#     print(encrypt('CRYPTOGRAPHY', 'BREAKBREAKBR'))
+#     print(decrypt('DICPDPXVAZIP', 'BREAKBREAKBR'))
+#
+#
+# if __name__ == '__main__':
+#     main()

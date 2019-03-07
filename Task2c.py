@@ -1,4 +1,5 @@
-import string, copy
+import string
+import copy
 
 
 def encrypt(word, key):
@@ -37,14 +38,18 @@ def encrypt(word, key):
                         list_of_table[tab][row][col] = word[number_word_letter]
                         number_word_letter += 1
     encrypted = ''
-   # zczytac tylko zostało :p
+    # czytac tylko zostało :p
 
     return encrypted
 
 
-def main():
-    print(encrypt('ALA_MA_KOTA', 'ALA'))
+def __str__():
+    return "Matrix C"
 
 
-if __name__ == '__main__':
-    main()
+# def main():
+#     print("password: "+encrypt('ALA_MA_KOTA', 'ALA'))
+#
+#
+# if __name__ == '__main__':
+#     main()

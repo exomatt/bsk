@@ -1,8 +1,8 @@
 # Caesar cipher
-import string
 
 
 def encrypt(word, move):
+    move = int(move)
     word = word.upper()
     encrypted = ''
     for letter in word:
@@ -15,6 +15,7 @@ def encrypt(word, move):
 
 
 def decrypt(word, move):
+    move = int(move)
     word = word.upper()
     decrypted = ''
     for letter in word:
@@ -28,10 +29,13 @@ def decrypt(word, move):
     return decrypted
 
 
-def main():
-    print(encrypt('CRYPTOGRAPHY', 3))
-    print(decrypt('FUBSWRJUDSKB', 3))
+def __str__():
+    return "Ceasar"
 
-
-if __name__ == '__main__':
-    main()
+# def main():
+#     print(encrypt('CRYPTOGRAPHY', 3))
+#     print(decrypt('FUBSWRJUDSKB', 3))
+#
+#
+# if __name__ == '__main__':
+#     main()
