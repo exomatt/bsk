@@ -1,6 +1,9 @@
 def encrypt(word, sequence):
     table = []
     encrypted = ''
+    sequence = sequence.split('-')
+    for i in range (len(sequence)):
+        sequence[i]=int(sequence[i])
     size = int(len(word) / len(sequence) + 1)
     for level in range(size):
         table.append(['\u0000'] * len(sequence))
@@ -20,9 +23,13 @@ def encrypt(word, sequence):
     return encrypted
 
 
-def main():
-    print(encrypt("ALA_MA_KOTA", [4, 3, 1, 2]))
+def __str__():
+    return "Matrix A"
 
-
-if __name__ == '__main__':
-    main()
+#
+# def main():
+#     print(encrypt2("ALA_MA_KOTA", [4, 3, 1, 2]))
+#
+#
+# if __name__ == '__main__':
+#     main()
