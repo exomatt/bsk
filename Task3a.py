@@ -32,10 +32,16 @@ def decrypt(word, move):
 def __str__():
     return "Ceasar"
 
-# def main():
-#     print(encrypt('CRYPTOGRAPHY', 3))
-#     print(decrypt('FUBSWRJUDSKB', 3))
-#
-#
-# if __name__ == '__main__':
-#     main()
+
+def main():
+    # print(encrypt('CRYPTOGRAPHY', 3))
+    # print(decrypt('FUBSWRJUDSKB', 3))
+    word = "CRYPTOGRAPHY"
+    key = "3"
+    pasw = decrypt(encrypt(word, key), key)
+    print(pasw)
+    print(word == pasw)
+
+
+if __name__ == '__main__':
+    main()

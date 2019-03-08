@@ -9,7 +9,7 @@ import Task3b as thirdB
 import Task4 as fourth
 
 labels = (first, second, secondB, secondC, third, thirdB, fourth)
-width = 20
+width = 40
 widthS = 5
 
 
@@ -102,9 +102,12 @@ def fix_tab(root, index):
 
 
 def main():
+    for field in labels:
+        print('\n'+field.__str__())
+        field.main()
     window = Tk()
     window.title("Some fancy title")
-    window.geometry('480x320')
+    window.geometry('780x320')
     tab_control = ttk.Notebook(window)
 
     # def on_tab_selected(event):

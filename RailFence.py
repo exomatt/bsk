@@ -58,3 +58,16 @@ def decrypt(word, key):
 
 def __str__():
     return "Railfence"
+
+
+def main():
+    key = "4"
+    word = "ALA_MA_KOTA"
+    print(encrypt(word, key))
+    pasw = decrypt(encrypt(word, key), key)
+    print(pasw)
+    print(word == pasw)
+
+
+if __name__ == '__main__':
+    main()

@@ -95,13 +95,14 @@ def decrypt(word, key):
 def __str__():
     return "Matrix B"
 
-# def main():
-#     print("\nMessage: " + "HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITIONS " + "\nKEY: " + "CONVENIENCE")
-#     print("------")
-#
-#     encrypt("HEREISASECRETMESSAGEENCIPHEREDBYTRANSPOSITIONS", "CONVENIENCE")
-#     decrypt("HECRNCEYIISEPSGDIRNTOAAESRMPNSSROEEBTETIASEEHS", "CONVENIENCE")
-#
-#
-# if __name__ == '__main__':
-#     main()
+
+def main():
+    word = "HEREISASECRETMESSAGEINCIPHEREDBYTRANSPOSITIONS"
+    key = "CONVENIENCE"
+    # TODO fix minor bugs while encrypting
+    pasw = decrypt(encrypt(word, key), key)
+    print(word == pasw)
+
+
+if __name__ == '__main__':
+    main()

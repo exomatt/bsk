@@ -37,10 +37,16 @@ def __str__():
     return "Vigenere’a"
 
 
-# def main():
-#     print(encrypt('CRYPTOGRAPHY', 'BREAKBREAKBR'))
-#     print(decrypt('DICPDPXVAZIP', 'BREAKBREAKBR'))
-#
-#
-# if __name__ == '__main__':
-#     main()
+def main():
+    # print(encrypt('CRYPTOGRAPHY', 'BREAKBREAKBR'))
+    # print(decrypt('DICPDPXVAZIP', 'BREAKBREAKBR'))
+    key = "BREAKBREAKBR"
+    word = "CRYPTOGRAPHY"
+    print(encrypt(word, key))
+    pasw = decrypt(encrypt(word, key), key)
+    print(pasw)
+    print(word == pasw)
+
+
+if __name__ == '__main__':
+    main()

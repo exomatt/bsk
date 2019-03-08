@@ -50,8 +50,16 @@ def __str__():
 
 
 def main():
-    print(encrypt('CRYPTOGRAPHY', 26, 7, 5))
-    print(decrypt('TURGIZVUFGCR', 26, 7, 5))
+    # print(encrypt('CRYPTOGRAPHY', 26, 7, 5))
+    # print(decrypt('TURGIZVUFGCR', 26, 7, 5))
+    key = "26"
+    word = "CRYPTOGRAPHY"
+    k1 = "7"
+    k0 = "5"
+    print(encrypt(word, key, k1, k0))
+    pasw = decrypt(encrypt(word, key, k1, k0), key, k1, k0)
+    print(pasw)
+    print(word == pasw)
 
 
 if __name__ == '__main__':
