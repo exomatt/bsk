@@ -1,6 +1,8 @@
 def encrypt(word, key):
     encrypted = ''
     key = int(key)
+    if key == 1:
+        return word
     for level in range(key):
         pos = level
         encrypted += word[pos]
@@ -23,6 +25,8 @@ def encrypt(word, key):
 
 def decrypt(word, key):
     key = int(key)
+    if key == 1:
+        return word
     encrypted = '0' * len(word)
     for level in range(key):
         pos = level
