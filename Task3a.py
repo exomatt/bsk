@@ -1,5 +1,3 @@
-# Caesar cipher
-
 
 def encrypt(word, move):
     move = int(move)
