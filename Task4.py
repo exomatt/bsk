@@ -8,10 +8,14 @@ def encrypt(word, key):
         moved_alphabet = alphabet[number:] + alphabet[:number]
         table.append(moved_alphabet)
     encrypted = ''
+    numberCol = 0
     for number in range(len(word)):
         row = ord(word[number]) - 65
-        col = ord(key[number]) - 65
+        if numberCol >= len(key):
+            numberCol = 0
+        col = ord(key[numberCol]) - 65
         encrypted += table[col][row]
+        numberCol += 1
     return encrypted
 
 
@@ -22,14 +26,18 @@ def decrypt(word, key):
         moved_alphabet = alphabet[number:] + alphabet[:number]
         table.append(moved_alphabet)
     decrypted = ''
+    numberCol = 0
     for number in range(len(word)):
-        row = ord(key[number]) - 65
+        if numberCol >= len(key):
+            numberCol = 0
+        row = ord(key[numberCol]) - 65
         searched_letter = ord(word[number]) - 65
         row_alphabet = table[row]
         for element in range(len(row_alphabet)):
             if row_alphabet[element] == alphabet[searched_letter]:
                 decrypted += alphabet[element]
                 break
+        numberCol += 1
     return decrypted
 
 
