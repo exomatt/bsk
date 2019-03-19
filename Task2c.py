@@ -144,6 +144,7 @@ def __str__():
 
 
 def main():
+    print(decrypt('ALM_KAI_A_TSAAO_P', 'ALA'))
     print(encrypt('KOTOLAKI_BRAKIMOWIC', 'KOTOLAKI'))
     print(encrypt('HERE_IS_A_SECRET_MESSAGE_ENCIPHERED_BY_TRANSPOSITION', 'CONVENIENCE'))
     print(encrypt('ALA_MA_KOTA_ACO', 'ALA'))
