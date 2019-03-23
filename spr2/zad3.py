@@ -12,37 +12,37 @@ def correct_value(value):
     value = list(map(int, value)) #convert string list to int list
     return value
 
-def create_shift_table(degree):
-    table = [""] * (degree+1)
+def create_shift_table(x_degree, polynomiad_degree):
+    table = [""] * (x_degree+1)
 
-    for row in range(degree+1):
-        table[row] = [""] * (degree)
+    for row in range(x_degree+1):
+        table[row] = [""] * (polynomiad_degree)
 
     return table
 
 
-x = '1000'
-x = correct_value(x)
+def encrypt(polynomial, x):
 
-polynomial = "0001011" # (x^4 + x^2 + x^1)
-last_index_1_value = polynomial.rfind("1")
-first_index_1_value = polynomial.find("1")
+    x = correct_value(x)
 
-polynomial = correct_value(polynomial)
+    last_index_1_value = polynomial.rfind("1")
 
-polynomial_degree = len(polynomial)
+    first_index_1_value = polynomial.find("1")
 
-shift_table = create_shift_table(polynomial_degree)
+    polynomial = correct_value(polynomial) # (x^4 + x^2 + x^1)
 
-polynomial_array = polynomial
+    polynomial_degree = len(polynomial)
+    x_degree = len(x)
 
-reversed_polynomial_array = polynomial_array[::-1]
+    shift_table = create_shift_table(x_degree, polynomial_degree)
 
-if(check_params(x, polynomial)):
+    polynomial_array = polynomial
+
+    reversed_polynomial_array = polynomial_array[::-1]
 
     significent_value = polynomial_degree - (last_index_1_value-first_index_1_value)
 
-    for row in range(polynomial_degree + 1):
+    for row in range(x_degree + 1):
         xor_sum = 0
         for col in range(polynomial_degree):
             if row == 0: # First row
@@ -58,3 +58,59 @@ if(check_params(x, polynomial)):
                         xor_sum += x[row-1]
                         shift_table[row][0] = xor_sum % 2
     print(shift_table)
+
+    key = ""
+    for row in range(x_degree):
+        key = int( str(key) + str(shift_table[row+1][significent_value-1]))
+
+    print('Y=' + str(key))
+
+def decrypt(polynomial, y):
+    y = correct_value(y)
+
+    last_index_1_value = polynomial.rfind("1")
+
+    first_index_1_value = polynomial.find("1")
+
+    polynomial = correct_value(polynomial)  # (x^4 + x^2 + x^1)
+
+    polynomial_degree = len(polynomial)
+    y_degree = len(y)
+
+    shift_table = create_shift_table(y_degree, polynomial_degree)
+
+    polynomial_array = polynomial
+
+    reversed_polynomial_array = polynomial_array[::-1]
+
+    for row in range(y_degree + 1):
+        for col in range(polynomial_degree):
+            if row == 0: # First row
+                shift_table[row] = polynomial_array
+                break
+            else: #For every row
+                if col == 0:
+                    shift_table[row][col] = y[row-1]
+                elif col > 0:
+                    shift_table[row][col] = shift_table[row - 1][col - 1]
+    x=''
+    print(shift_table)
+    for row in range(y_degree):
+        value = 0
+        for col in range(polynomial_degree):
+            if reversed_polynomial_array[col] == 1:
+                value += shift_table[row][col]
+        value += y[row]
+
+        value = value % 2
+
+        x = int(str(x) + str(value))
+
+    print('X=' + str(x))
+
+def main():
+    encrypt('1011','1000') # Y = 1100
+    decrypt('1011','1100')
+
+if __name__ == '__main__':
+    main()
