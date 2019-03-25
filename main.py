@@ -7,6 +7,7 @@ import Task2c as secondC
 import Task3a as third
 import Task3b as thirdB
 import Task4 as fourth
+from spr2 import LFSR, zad2, zad3
 
 labels = (first, second, secondB, secondC, third, thirdB, fourth)
 width = 40
@@ -53,10 +54,6 @@ def makeform(root, field):
 
 def fix_tab(root, index):
     root.forget(index)
-    # tab = makeform(root, labels[index])
-    # temp= tab.children
-    # tab.
-    # root.insert(index, tab, text="text")
     tab = ttk.Frame(root)
     txt = Entry(tab, width=width)
     txt.grid(column=00, row=0)
@@ -103,24 +100,20 @@ def fix_tab(root, index):
 
 def main():
     for field in labels:
-        print('\n'+field.__str__())
+        print('\n' + field.__str__())
         field.main()
     window = Tk()
     window.title("Some fancy title")
     window.geometry('780x320')
     tab_control = ttk.Notebook(window)
 
-    # def on_tab_selected(event):
-    #     selected_tab = event.widget.select()
-    #     tab_text = event.widget.tab(selected_tab, "text")
-
     for field in labels:
         tab_control.add(makeform(tab_control, field), text=field.__str__())
 
-    # tab_control.bind("<<NotebookTabChanged>>", on_tab_selected)
     fix_tab(tab_control, 5)
+    tab_control.add(LFSR.makeform(tab_control), text=LFSR.__str__())
+    tab_control.add(zad2.makeform(tab_control), text=zad2.__str__())
 
-    # lbl3 = Entry(temp, width=width)
     tab_control.pack(expand=1, fill='both')
 
     window.mainloop()

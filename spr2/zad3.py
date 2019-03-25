@@ -1,19 +1,24 @@
-import string
+import pathlib
 import time
 
-import bitarray
-import pathlib
-
 from spr2 import readBinFile
+
+from tkinter import *
+from tkinter import ttk
+
+width = 40
+widthS = 5
+
 
 def check_params(arg1, arg2):
     while arg1.startswith("0"):
         arg1 = arg1[1:]
 
-    if ((len(list(map(int,arg2))) == len(list(map(int,arg1))))):
+    if len(list(map(int, arg2))) == len(list(map(int, arg1))):
         return True
     else:
         return False
+
 
 def correct_value(value):
     while value.startswith("0"):
@@ -21,12 +26,14 @@ def correct_value(value):
     value = list(map(int, value))  # convert string list to int list
     return value
 
+
 def create_zeros_prefix(x):
     zeros = ''
     while x.startswith("0"):
         zeros = str(str(zeros) + str('0'))
         x = x[1:]
     return zeros
+
 
 def create_shift_table(x_degree, polynomial_degree):
     table = [""] * (x_degree + 1)
@@ -37,10 +44,9 @@ def create_shift_table(x_degree, polynomial_degree):
     return table
 
 
-def encrypt(polynomial,seed, x):
-
+def encrypt(polynomial, seed, x):
     x = correct_value(x)
-    seed = list(map(int,seed))
+    seed = list(map(int, seed))
 
     last_index_1_value = polynomial.rfind("1")
 
@@ -66,8 +72,8 @@ def encrypt(polynomial,seed, x):
                 shift_table[row] = seed
                 break
             else:  # Every row despite first one
-                if(polynomial_degree == 1):
-                    shift_table[row][col] = (x[row-1] + shift_table[row-1][col]) % 2
+                if polynomial_degree == 1:
+                    shift_table[row][col] = (x[row - 1] + shift_table[row - 1][col]) % 2
                 else:
                     if reversed_polynomial_array[col] == 1:
                         xor_sum += shift_table[row - 1][col]
@@ -93,10 +99,9 @@ def encrypt(polynomial,seed, x):
     return str(key)
 
 
-def decrypt(polynomial,seed, y, zeros):
-    y = list(map(int,y))
-    seed = list(map(int,seed))
-
+def decrypt(polynomial, seed, y, zeros):
+    y = list(map(int, y))
+    seed = list(map(int, seed))
 
     polynomial = correct_value(polynomial)  # (x^4 + x^2 + x^1)
 
@@ -139,21 +144,21 @@ def decrypt(polynomial,seed, y, zeros):
 
     readBinFile.write_bin_file_string(str(current_dir) + '/decryption_result_' + cur_time + '.bin', x)
 
-    #------------------------------------------------------------------------------------------------------#
+    # ------------------------------------------------------------------------------------------------------#
     # UWAGA! Żeby sprawdzić program porownujemy plik 'decryption_result_XX:XX:XX.bin' z 'zad3_input_X.bin' #
-    #------------------------------------------------------------------------------------------------------#
-    
-def main():
+    # ------------------------------------------------------------------------------------------------------#
 
+
+def main():
     with open('zad3_input_X.bin', 'r') as content_file:
         x = content_file.read()
 
     zeros = create_zeros_prefix(x)
 
-    polynomial = '1010100' #First input
-    seed = '1000100'  #Secound input
+    polynomial = '1010100'  # First input
+    seed = '1000100'  # Secound input
 
-    if(check_params(polynomial, seed) == False or len(polynomial)==0):
+    if check_params(polynomial, seed) is False or len(polynomial) == 0:
         print("Złe parametry")
         return 0
 
@@ -163,6 +168,46 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+def makeform(root):
+    tab = ttk.Frame(root)
+    txt = Entry(tab, width=width)
+    txt.grid(column=0, row=0)
+    txt2 = Entry(tab, width=width)
+    txt2.grid(column=1, row=0)
+    txt3 = Entry(tab, width=widthS)
+    txt3.grid(column=2, row=0)
+    lbl = Entry(tab, width=width)
+    lbl.grid(column=6, row=0)
+
+    # def clicked():
+    #     obj.lfsr(txt.get(), txt2.get())
+    #
+    # def clicked2():
+    #     var = StringVar()
+    #     var.set(obj.next())
+    #     lbl.configure(textvariable=var)
+    #
+    # def clicked3():
+    #     obj.mode = 1
+    #     with open("test.txt", "w") as f:
+    #         f.write('')
+    #     with open("test.txt", "a+") as f:
+    #         for i in range(0, int(txt3.get())):
+    #             print("Mode on")
+    #             arr = obj.next()
+    #             f.write(', '.join(str(x) for x in arr))
+    #             f.write('\n')
+    #     obj.mode = 0
+
+    # btn = Button(tab, text="Prep LFSR", command=clicked)
+    # btn.grid(column=3, row=0)
+    # btn = Button(tab, text="Get Next", command=clicked2)
+    # btn.grid(column=4, row=0)
+    # btn = Button(tab, text="Do Many", command=clicked3)
+    # btn.grid(column=5, row=0)
+    return tab
 
 
 def __str__():
