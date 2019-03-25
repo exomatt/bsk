@@ -1,5 +1,8 @@
 import string
+import time
+
 import bitarray
+import pathlib
 
 from spr2 import readBinFile
 
@@ -81,8 +84,10 @@ def encrypt(polynomial,seed, x):
 
     print(significent_value)
 
+    current_dir = pathlib.Path(__file__).parent
+    cur_time = time.strftime("%H:%M:%S")
 
-    readBinFile.write_bin_file_string("testwrite3_encrypted.bin", key)
+    readBinFile.write_bin_file_string(str(current_dir) + '/encryption_result' + cur_time + '.bin', key)
     print('Y=' + str(key))
 
     return str(key)
@@ -92,8 +97,6 @@ def decrypt(polynomial,seed, y, zeros):
     y = list(map(int,y))
     seed = list(map(int,seed))
 
-    #last_index_1_value = polynomial.rfind("1")
-    #first_index_1_value = polynomial.find("1")
 
     polynomial = correct_value(polynomial)  # (x^4 + x^2 + x^1)
 
@@ -130,20 +133,25 @@ def decrypt(polynomial,seed, y, zeros):
         x = str(str(x) + str(value))
 
     x = str(str(zeros) + str(x))
-    print('X=' + str(x))
-    readBinFile.write_bin_file_string("testwrite3_decrypted.bin", x)
 
-    #--------------------------------------------------------------------------------------------------#
-    # UWAGA! Żeby sprawdzić program porownujemy plik 'testwrite3_decrypted.bin' z 'testwrite3.bin' #
-    #--------------------------------------------------------------------------------------------------#
+    current_dir = pathlib.Path(__file__).parent
+    cur_time = time.strftime("%H:%M:%S")
+
+    readBinFile.write_bin_file_string(str(current_dir) + '/decryption_result_' + cur_time + '.bin', x)
+
+    #------------------------------------------------------------------------------------------------------#
+    # UWAGA! Żeby sprawdzić program porownujemy plik 'decryption_result_XX:XX:XX.bin' z 'zad3_input_X.bin' #
+    #------------------------------------------------------------------------------------------------------#
+    
 def main():
-    with open('/home/damian/Projects/BSK/spr2/testwrite3.bin', 'r') as content_file:
+
+    with open('zad3_input_X.bin', 'r') as content_file:
         x = content_file.read()
 
     zeros = create_zeros_prefix(x)
 
-    polynomial = '1'
-    seed = '0'
+    polynomial = '1010100' #First input
+    seed = '1000100'  #Secound input
 
     if(check_params(polynomial, seed) == False or len(polynomial)==0):
         print("Złe parametry")
@@ -151,8 +159,6 @@ def main():
 
     Y = encrypt(polynomial, seed, x)
     decrypt(polynomial, seed, Y, zeros)
-    #Y = encrypt(polynomial,seed, '11011100')
-    #decrypt(polynomial,seed, Y, zeros)
 
 
 if __name__ == '__main__':

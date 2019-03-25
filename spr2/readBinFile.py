@@ -35,7 +35,7 @@ def main():
     test__bin = '/home/damian/Projects/BSK/spr2/test3.bin'
     bitarray = read_bin_file_to_bitarray(test__bin)
     print(bitarray)
-    write_bin_file_string('testwrite3.bin', bitarray.to01())
+    write_bin_file_string('zad3_input_X.bin', bitarray.to01())
     return bitarray
 
 if __name__ == '__main__':
