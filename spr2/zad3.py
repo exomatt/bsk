@@ -1,12 +1,16 @@
 import string
+import bitarray
 
+from spr2 import readBinFile
 
 def check_params(arg1, arg2):
-    if (len(arg2) == len(arg1)):
+    while arg1.startswith("0"):
+        arg1 = arg1[1:]
+
+    if ((len(list(map(int,arg2))) == len(list(map(int,arg1))))):
         return True
     else:
         return False
-
 
 def correct_value(value):
     while value.startswith("0"):
@@ -14,6 +18,12 @@ def correct_value(value):
     value = list(map(int, value))  # convert string list to int list
     return value
 
+def create_zeros_prefix(x):
+    zeros = ''
+    while x.startswith("0"):
+        zeros = str(str(zeros) + str('0'))
+        x = x[1:]
+    return zeros
 
 def create_shift_table(x_degree, polynomial_degree):
     table = [""] * (x_degree + 1)
@@ -24,8 +34,10 @@ def create_shift_table(x_degree, polynomial_degree):
     return table
 
 
-def encrypt(polynomial, x):
+def encrypt(polynomial,seed, x):
+
     x = correct_value(x)
+    seed = list(map(int,seed))
 
     last_index_1_value = polynomial.rfind("1")
 
@@ -48,32 +60,40 @@ def encrypt(polynomial, x):
         xor_sum = 0
         for col in range(polynomial_degree):
             if row == 0:  # First row
-                shift_table[row] = polynomial_array
+                shift_table[row] = seed
                 break
             else:  # Every row despite first one
-                if reversed_polynomial_array[col] == 1:
-                    xor_sum += shift_table[row - 1][col]
+                if(polynomial_degree == 1):
+                    shift_table[row][col] = (x[row-1] + shift_table[row-1][col]) % 2
+                else:
+                    if reversed_polynomial_array[col] == 1:
+                        xor_sum += shift_table[row - 1][col]
 
-                if col > 0:
-                    shift_table[row][col] = shift_table[row - 1][col - 1]
-                    if col == (polynomial_degree - 1):  # Last column in every row
-                        xor_sum += x[row - 1]
-                        shift_table[row][0] = xor_sum % 2
-    print(shift_table)
+                    if col > 0:
+                        shift_table[row][col] = shift_table[row - 1][col - 1]
+                        if col == (polynomial_degree - 1):  # Last column in every row
+                            xor_sum += x[row - 1]
+                            shift_table[row][0] = xor_sum % 2
 
     key = ""
     for row in range(x_degree):
-        key = int(str(key) + str(shift_table[row + 1][significent_value - 1]))
+        key = str(str(key) + str(shift_table[row + 1][0]))
 
+    print(significent_value)
+
+
+    readBinFile.write_bin_file_string("testwrite3_encrypted.bin", key)
     print('Y=' + str(key))
 
+    return str(key)
 
-def decrypt(polynomial, y):
-    y = correct_value(y)
 
-    last_index_1_value = polynomial.rfind("1")
+def decrypt(polynomial,seed, y, zeros):
+    y = list(map(int,y))
+    seed = list(map(int,seed))
 
-    first_index_1_value = polynomial.find("1")
+    #last_index_1_value = polynomial.rfind("1")
+    #first_index_1_value = polynomial.find("1")
 
     polynomial = correct_value(polynomial)  # (x^4 + x^2 + x^1)
 
@@ -89,7 +109,7 @@ def decrypt(polynomial, y):
     for row in range(y_degree + 1):
         for col in range(polynomial_degree):
             if row == 0:  # First row
-                shift_table[row] = polynomial_array
+                shift_table[row] = seed
                 break
             else:  # For every row
                 if col == 0:
@@ -97,7 +117,7 @@ def decrypt(polynomial, y):
                 elif col > 0:
                     shift_table[row][col] = shift_table[row - 1][col - 1]
     x = ''
-    print(shift_table)
+
     for row in range(y_degree):
         value = 0
         for col in range(polynomial_degree):
@@ -107,15 +127,37 @@ def decrypt(polynomial, y):
 
         value = value % 2
 
-        x = int(str(x) + str(value))
+        x = str(str(x) + str(value))
 
+    x = str(str(zeros) + str(x))
     print('X=' + str(x))
+    readBinFile.write_bin_file_string("testwrite3_decrypted.bin", x)
 
-
+    #--------------------------------------------------------------------------------------------------#
+    # UWAGA! Żeby sprawdzić program porownujemy plik 'testwrite3_decrypted.bin' z 'testwrite3.bin' #
+    #--------------------------------------------------------------------------------------------------#
 def main():
-    encrypt('1011', '1000')  # Y = 1100
-    decrypt('1011', '1100')
+    with open('/home/damian/Projects/BSK/spr2/testwrite3.bin', 'r') as content_file:
+        x = content_file.read()
+
+    zeros = create_zeros_prefix(x)
+
+    polynomial = '1'
+    seed = '0'
+
+    if(check_params(polynomial, seed) == False or len(polynomial)==0):
+        print("Złe parametry")
+        return 0
+
+    Y = encrypt(polynomial, seed, x)
+    decrypt(polynomial, seed, Y, zeros)
+    #Y = encrypt(polynomial,seed, '11011100')
+    #decrypt(polynomial,seed, Y, zeros)
 
 
 if __name__ == '__main__':
     main()
+
+
+def __str__():
+    return "Ciphertext Autokey"
