@@ -44,7 +44,15 @@ def create_shift_table(x_degree, polynomial_degree):
     return table
 
 
-def encrypt(polynomial, seed, x):
+def encrypt(polynomial, seed):
+
+    if check_params(polynomial, seed) is False or len(polynomial) == 0:
+        print("Złe parametry")
+        sys.exit(0)
+
+    with open('zad3_input_X.bin', 'r') as content_file:
+        x = content_file.read()
+
     x = correct_value(x)
     seed = list(map(int, seed))
 
@@ -99,7 +107,13 @@ def encrypt(polynomial, seed, x):
     return str(key)
 
 
-def decrypt(polynomial, seed, y, zeros):
+def decrypt(polynomial, seed, y):
+
+    with open('zad3_input_X.bin', 'r') as content_file:
+        x = content_file.read()
+
+    zeros = create_zeros_prefix(x)
+
     y = list(map(int, y))
     seed = list(map(int, seed))
 
@@ -150,20 +164,12 @@ def decrypt(polynomial, seed, y, zeros):
 
 
 def main():
-    with open('zad3_input_X.bin', 'r') as content_file:
-        x = content_file.read()
 
-    zeros = create_zeros_prefix(x)
+    polynomial = '101010'  # First param
+    seed = '100010'        # Secound param
 
-    polynomial = '1010100'  # First input
-    seed = '1000100'  # Secound input
-
-    if check_params(polynomial, seed) is False or len(polynomial) == 0:
-        print("Złe parametry")
-        return 0
-
-    Y = encrypt(polynomial, seed, x)
-    decrypt(polynomial, seed, Y, zeros)
+    Y = encrypt(polynomial, seed)
+    decrypt(polynomial, seed, Y)
 
 
 if __name__ == '__main__':
