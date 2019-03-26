@@ -99,9 +99,9 @@ def fix_tab(root, index):
 
 
 def main():
-    for field in labels:
-        print('\n' + field.__str__())
-        field.main()
+    # for field in labels:
+    #     print('\n' + field.__str__())
+    #     field.main()
     window = Tk()
     window.title("Some fancy title")
     window.geometry('780x320')
@@ -113,6 +113,7 @@ def main():
     fix_tab(tab_control, 5)
     tab_control.add(LFSR.makeform(tab_control), text=LFSR.__str__())
     tab_control.add(zad2.makeform(tab_control), text=zad2.__str__())
+    tab_control.add(zad3.makeform(tab_control), text=zad3.__str__())
 
     tab_control.pack(expand=1, fill='both')
 

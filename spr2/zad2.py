@@ -65,9 +65,9 @@ def makeform(root):
     txt3.grid(column=2, row=0)
     txt4 = Entry(tab, width=width)
     txt4.grid(column=3, row=0)
-    lbl = Entry(tab, width=width)
+    # lbl = Entry(tab, width=width)
     # lbl.grid(column=6, row=0)
-    obj = LFSR.LFSR()
+    # obj = LFSR.LFSR()
 
     # def clicked():
     #     obj.lfsr(txt.get(), txt2.get())
