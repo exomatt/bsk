@@ -5,10 +5,13 @@ import bitarray
 
 from spr2 import readBinFile
 
+import os
 from tkinter import *
 from tkinter import ttk
 
-width = 40
+from spr2 import readBinFile
+
+width = 25
 widthS = 5
 
 def check_params(arg1, arg2):
@@ -46,7 +49,6 @@ def create_shift_table(x_degree, polynomial_degree):
 
 
 def encrypt(polynomial, seed, input_file, out_encrypted):
-
     if check_params(polynomial, seed) is False or len(polynomial) == 0:
         print("Złe parametry")
         sys.exit(0)
@@ -97,8 +99,8 @@ def encrypt(polynomial, seed, input_file, out_encrypted):
     for row in range(x_degree):
         key.append(shift_table[row + 1][0])
 
-    current_dir = pathlib.Path(__file__).parent
-    cur_time = time.strftime("%H:%M:%S")
+    # current_dir = pathlib.Path(__file__).parent
+    # cur_time = time.strftime("%H:%M:%S")
 
     readBinFile.write_bin_file(out_encrypted, key)
 
@@ -143,8 +145,8 @@ def decrypt(polynomial, seed, input_file, out):
         value = value % 2
         x.append(value)
 
-    current_dir = pathlib.Path(__file__).parent
-    cur_time = time.strftime("%H:%M:%S")
+    # current_dir = pathlib.Path(__file__).parent
+    # cur_time = time.strftime("%H:%M:%S")
 
     readBinFile.write_bin_file(out, x)
 
@@ -158,8 +160,8 @@ def main():
     polynomial = '101101'  # First param
     seed = '111000'        # Secound param
 
-    encrypt(polynomial, seed,"zad3_input_X.bin","out_encrypted.bin")
-    decrypt(polynomial, seed, "out_encrypted.bin","decryption_result.bin")
+    encrypt(polynomial, seed, "zad3_input_X.bin", "out_encrypted.bin")
+    decrypt(polynomial, seed, "out_encrypted.bin", "decryption_result.bin")
 
 if __name__ == '__main__':
     main()
@@ -171,37 +173,33 @@ def makeform(root):
     txt.grid(column=0, row=0)
     txt2 = Entry(tab, width=width)
     txt2.grid(column=1, row=0)
-    txt3 = Entry(tab, width=widthS)
+    txt3 = Entry(tab, width=width)
     txt3.grid(column=2, row=0)
-    lbl = Entry(tab, width=width)
-    lbl.grid(column=6, row=0)
+    txt4 = Entry(tab, width=width)
+    txt4.grid(column=3, row=0)
+
+    # lbl = Entry(tab, width=width)
+
+    # lbl.grid(column=6, row=0)
+    # obj = LFSR.LFSR()
 
     # def clicked():
     #     obj.lfsr(txt.get(), txt2.get())
-    #
-    # def clicked2():
-    #     var = StringVar()
-    #     var.set(obj.next())
-    #     lbl.configure(textvariable=var)
-    #
-    # def clicked3():
-    #     obj.mode = 1
-    #     with open("test.txt", "w") as f:
-    #         f.write('')
-    #     with open("test.txt", "a+") as f:
-    #         for i in range(0, int(txt3.get())):
-    #             print("Mode on")
-    #             arr = obj.next()
-    #             f.write(', '.join(str(x) for x in arr))
-    #             f.write('\n')
-    #     obj.mode = 0
+
+    def clicked2():
+        encrypt(txt.get(), txt2.get(), "spr2/" + txt3.get(), "spr2/" + txt4.get())
+        print("Done")
+
+    def clicked3():
+        decrypt(txt.get(), txt2.get(), "spr2/" + txt3.get(), "spr2/" + txt4.get())
+        print("Done")
 
     # btn = Button(tab, text="Prep LFSR", command=clicked)
-    # btn.grid(column=3, row=0)
-    # btn = Button(tab, text="Get Next", command=clicked2)
     # btn.grid(column=4, row=0)
-    # btn = Button(tab, text="Do Many", command=clicked3)
-    # btn.grid(column=5, row=0)
+    btn = Button(tab, text="Encrypt", command=clicked2)
+    btn.grid(column=5, row=0)
+    btn = Button(tab, text="Decrypt", command=clicked3)
+    btn.grid(column=6, row=0)
     return tab
 
 
