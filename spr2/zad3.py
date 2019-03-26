@@ -9,6 +9,7 @@ from tkinter import ttk
 width = 40
 widthS = 5
 
+zeros1 = ''
 
 def check_params(arg1, arg2):
     while arg1.startswith("0"):
@@ -44,21 +45,24 @@ def create_shift_table(x_degree, polynomial_degree):
     return table
 
 
-def encrypt(polynomial, seed):
+def encrypt(polynomial, seed, input_file, out_encrypted):
 
     if check_params(polynomial, seed) is False or len(polynomial) == 0:
         print("Złe parametry")
         sys.exit(0)
 
-    with open('zad3_input_X.bin', 'r') as content_file:
+    with open(input_file, 'r') as content_file:
         x = content_file.read()
+
+    global zeros1
+    zeros1 = create_zeros_prefix(x)
 
     x = correct_value(x)
     seed = list(map(int, seed))
 
-    last_index_1_value = polynomial.rfind("1")
+    #last_index_1_value = polynomial.rfind("1")
 
-    first_index_1_value = polynomial.find("1")
+    #first_index_1_value = polynomial.find("1")
 
     polynomial = correct_value(polynomial)  # (x^4 + x^2 + x^1)
 
@@ -71,7 +75,7 @@ def encrypt(polynomial, seed):
 
     reversed_polynomial_array = polynomial_array[::-1]
 
-    significent_value = polynomial_degree - (last_index_1_value - first_index_1_value)
+    #significent_value = polynomial_degree - (last_index_1_value - first_index_1_value)
 
     for row in range(x_degree + 1):
         xor_sum = 0
@@ -96,26 +100,23 @@ def encrypt(polynomial, seed):
     for row in range(x_degree):
         key = str(str(key) + str(shift_table[row + 1][0]))
 
-    print(significent_value)
-
     current_dir = pathlib.Path(__file__).parent
     cur_time = time.strftime("%H:%M:%S")
 
-    readBinFile.write_bin_file_string(str(current_dir) + '/encryption_result' + cur_time + '.bin', key)
+    readBinFile.write_bin_file_string(out_encrypted, str(key))
     print('Y=' + str(key))
 
     return str(key)
 
 
-def decrypt(polynomial, seed, y):
+def decrypt(polynomial, seed, y, out):
 
-    with open('zad3_input_X.bin', 'r') as content_file:
-        x = content_file.read()
-
-    zeros = create_zeros_prefix(x)
+    with open(y, 'r') as content_file:
+        y = content_file.read()
 
     y = list(map(int, y))
     seed = list(map(int, seed))
+
 
     polynomial = correct_value(polynomial)  # (x^4 + x^2 + x^1)
 
@@ -151,12 +152,12 @@ def decrypt(polynomial, seed, y):
 
         x = str(str(x) + str(value))
 
-    x = str(str(zeros) + str(x))
+    x = str(str(zeros1) + str(x))
 
     current_dir = pathlib.Path(__file__).parent
     cur_time = time.strftime("%H:%M:%S")
 
-    readBinFile.write_bin_file_string(str(current_dir) + '/decryption_result_' + cur_time + '.bin', x)
+    readBinFile.write_bin_file_string(out, x)
 
     # ------------------------------------------------------------------------------------------------------#
     # UWAGA! Żeby sprawdzić program porownujemy plik 'decryption_result_XX:XX:XX.bin' z 'zad3_input_X.bin' #
@@ -165,11 +166,11 @@ def decrypt(polynomial, seed, y):
 
 def main():
 
-    polynomial = '101010'  # First param
-    seed = '100010'        # Secound param
+    polynomial = '0101011'  # First param
+    seed = '101000'        # Secound param
 
-    Y = encrypt(polynomial, seed)
-    decrypt(polynomial, seed, Y)
+    encrypt(polynomial, seed,"zad3_input_X.bin","out_encrypted.bin")
+    decrypt(polynomial, seed, "out_encrypted.bin","decryption_result.bin")
 
 
 if __name__ == '__main__':
