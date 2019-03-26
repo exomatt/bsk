@@ -20,10 +20,10 @@ class LFSR:
 
     def lfsr(self, seed, polynomial):
         if polynomial.endswith('0'):
-            print ("Polynomial ends with 0")
+            print("Polynomial ends with 0")
             return None
         if len(seed) != len(polynomial):
-            print( "Params arent the same length")
+            print("Params arent the same length")
             return None
         self.arr = array.array('i', (0 for i in range(0, len(seed))))
         self.poly = array.array('i', (0 for i in range(0, len(seed))))
@@ -38,12 +38,14 @@ class LFSR:
         if self.poly is None or self.arr is None:
             return None
         # temp = self.arr[:]
-        for j in range(len(self.arr) - 1, 0, -1):
-            self.arr[j] = self.arr[j - 1]
         self.output = self.arr[len(self.poly) - 1]
         for j in range(len(self.poly) - 1, 0, -1):
             if self.poly[j - 1] == 1:
+                x = self.poly[j - 1]
+                y = self.arr[j - 1]
                 self.output = (self.output + self.arr[j - 1]) % 2
+        for j in range(len(self.arr) - 1, 0, -1):
+            self.arr[j] = self.arr[j - 1]
         self.arr[0] = self.output
         if self.mode == 1:
             return self.arr
@@ -59,7 +61,8 @@ def main():
     print("Main")
     obj = LFSR()
     obj.lfsr("111010", "101011")
-    obj.mode = 1
+    odp="1110100101"
+    # obj.mode = 1
     for i in range(0, 10):
         print(obj.next())
 

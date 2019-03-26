@@ -2,7 +2,6 @@ import pathlib
 import time
 import bitarray
 
-
 from spr2 import readBinFile
 
 import os
@@ -13,6 +12,7 @@ from spr2 import readBinFile
 
 width = 25
 widthS = 5
+
 
 def check_params(arg1, arg2):
     while arg1.startswith("0"):
@@ -55,13 +55,13 @@ def encrypt(polynomial, seed, input_file, out_encrypted):
 
     x = readBinFile.read_bin_file_to_bitarray(input_file)
 
-    x = list(map(int,x))
+    x = list(map(int, x))
 
     seed = list(map(int, seed))
 
-    #last_index_1_value = polynomial.rfind("1")
+    # last_index_1_value = polynomial.rfind("1")
 
-    #first_index_1_value = polynomial.find("1")
+    # first_index_1_value = polynomial.find("1")
 
     polynomial = correct_value(polynomial)  # (x^4 + x^2 + x^1)
 
@@ -74,7 +74,7 @@ def encrypt(polynomial, seed, input_file, out_encrypted):
 
     reversed_polynomial_array = polynomial_array[::-1]
 
-    #significent_value = polynomial_degree - (last_index_1_value - first_index_1_value)
+    # significant_value = polynomial_degree - (last_index_1_value - first_index_1_value)
 
     for row in range(x_degree + 1):
         xor_sum = 0
@@ -103,7 +103,6 @@ def encrypt(polynomial, seed, input_file, out_encrypted):
     # cur_time = time.strftime("%H:%M:%S")
 
     readBinFile.write_bin_file(out_encrypted, key)
-
 
 
 def decrypt(polynomial, seed, input_file, out):
@@ -156,12 +155,12 @@ def decrypt(polynomial, seed, input_file, out):
 
 
 def main():
-
     polynomial = '101101'  # First param
-    seed = '111000'        # Secound param
+    seed = '111000'  # Secound param
 
     encrypt(polynomial, seed, "zad3_input_X.bin", "out_encrypted.bin")
     decrypt(polynomial, seed, "out_encrypted.bin", "decryption_result.bin")
+
 
 if __name__ == '__main__':
     main()
