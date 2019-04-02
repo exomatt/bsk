@@ -1,0 +1,56 @@
+56 bitowy kluczowy
+
+start -> str 9 drabinka
+str 10 IP permutacja zaczyna sie od 1 do 64 bo tak
+permutacja -> dzielenie na 2 bloki -> r do funkcji  potem xor z l i zamiana miejsc
+tak 16 razy ale ostatni raz brak zamiany miejscami
+permutacja odwrotna
+i wyjscie
+
+deszyfracja odwrocona kolejnosć k i 16 iteracja zawsze bez odwrocenia
+
+///funkcja
+funkcja f ma 32  jest zmieniane na 48 bitow   i xor z kluczem 48 kluczem
+dzielnie na 6 bitowe bloki
+i zrobienie 32 bitow
+permutacja
+i wynik funkcji
+
+sbox
+
+111000
+
+pierwszy ostatni czyli 10  to 2 dziesietnie
+srodek 1100(2) = 12
+tabelka 2 i 12  czyli 3  -> 0011 (2)
+
+
+nie operowac na stringach!!
+
+&& true false
+& wektor -> (x>>1)&0xF -> to wycina ładnie srodek :D :P
+
+//generowanie kluczy
+klucz 64 bity
+pc 1 permutacja  w tablicy brak 8 16 24 i tak dalej jest to przeznaczony na bit parzystosci
+czyli 56 bitow w kluczu
+
+dzielenie po 28 na 2 połowy
+
+c i d
+
+przsuwany w lewo
+
+trafia do pc2 i wychodzi jako k1
+
+
+
+bloki przetwarzania 64 bity
+
+ostatni blok jak cos moe byc mniejszy trzeba znalexc rozwiazanie dodajemy 10000 i usuwamy do 1
+dopisanie bloku jak nawet maks
+
+dopisujemy 2 bajty  albo 8 bajtow
+padding _> _> _> ->
+
+2 tygodnie na wykonanie
