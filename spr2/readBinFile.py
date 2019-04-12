@@ -41,6 +41,7 @@ def compare_two_bin_files(file1, file2):
 def main():
     test__bin = '/home/damian/Projects/BSK/spr2/test3.bin'
     array = read_bin_file_to_bitarray(test__bin)
+
     print(array)
     write_bin_file_string('zad3_input_X.bin', array.to01())
     return array
