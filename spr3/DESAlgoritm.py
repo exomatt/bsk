@@ -89,5 +89,5 @@ if __name__ == '__main__':
     input_key = bitarray('1110011111000011111100001000011110100101110000111001011001101001')
     message = bitarray("1111111110100011101000111010001110100011101000111010001110100011")
     print("Encrypted: ")
-    print("right is 0001 0011 0010 0001 0010 0100 1011 0111")
+    print("at internet fund this but it difrent than our :c :/ 0001 0011 0010 0001 0010 0100 1011 0111")
     print(encrypt_block(message, input_key))
