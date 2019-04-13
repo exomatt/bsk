@@ -1,8 +1,9 @@
 from bitarray import bitarray
 
+import spr2.readBinFile as readBinFile
 import spr3.DES as keygenerator
 import spr3.des_key as des_key
-import spr2.readBinFile as readBinFile
+
 
 # za parametr przyjmuje bitarray :)
 
@@ -74,13 +75,13 @@ def encrypt_block(message_in, key):
     result_encryption = inverse_permutation(massage_after_iter)
     return result_encryption
 
+
 # przyjmuje bit array i tu i tu czyli przed klucz słowny zamienic na bitarray
 def decrypt_block(encrypted_message_in, key):
-
     permuted_message = init_permutation(encrypted_message_in)
     left_message, right_massage = spliHalf(permuted_message)
 
-    keys_list = keygenerator.generate_key(key)[::-1] # Reverse generated keys. [ 0, 1, 2... 15 ] -> [ 15, 14, 13... 0 ]
+    keys_list = keygenerator.generate_key(key)[::-1]  # Reverse generated keys. [ 0, 1, 2... 15 ] -> [ 15, 14, 13... 0 ]
 
     for i in range(16):
         temp_left = right_massage
@@ -97,9 +98,19 @@ def decrypt_block(encrypted_message_in, key):
 def encrypt_file_full_file(input_file, out, input_key):
     message_file = readBinFile.read_bin_file_to_bitarray(input_file)
 
+    # add padding
+    file_lenght = message_file.length() % 64
+    if file_lenght != 0:
+        to_add = 64 - file_lenght + 63
+        message_file += bitarray("1")
+        message_file += (to_add) * bitarray("0")
+    else:
+        message_file += bitarray("1")
+        message_file += (63) * bitarray("0")
+
     encrypted_message = bitarray()
-    for block in range(int(len(message_file)/64)):
-        block_message = message_file[(block * 64):((block+1) * 64)]
+    for block in range(int(len(message_file) / 64)):
+        block_message = message_file[(block * 64):((block + 1) * 64)]
         block_encrypted_message = encrypt_block(block_message, input_key)
 
         encrypted_message += block_encrypted_message
@@ -111,13 +122,24 @@ def decrypt_file_full_file(input_encrypted_file, out, input_key):
     message_encrypted_file = readBinFile.read_bin_file_to_bitarray(input_encrypted_file)
 
     decrypted_message = bitarray()
-    for block in range(int(len(message_encrypted_file)/64)):
-        block_message = message_encrypted_file[(block * 64):((block+1) * 64)]
+    for block in range(int(len(message_encrypted_file) / 64)):
+        block_message = message_encrypted_file[(block * 64):((block + 1) * 64)]
         block_decrypted_message = decrypt_block(block_message, input_key)
 
         decrypted_message += block_decrypted_message
 
-    readBinFile.write_bin_file(out, decrypted_message)
+    # delete padding
+    print(decrypted_message)
+    decrypted_message.reverse()
+    print(decrypted_message)
+    message_copy = decrypted_message.copy()
+    for num in range(len(decrypted_message)):
+        if (decrypted_message[num] == 1):
+            message_copy.pop(0)
+            break
+        message_copy.pop(0)
+    message_copy.reverse()
+    readBinFile.write_bin_file(out, message_copy)
 
 
 if __name__ == '__main__':
@@ -135,13 +157,15 @@ if __name__ == '__main__':
     input_key = bitarray('1110011111000011111100001000011110100101110000111001011001101001')
 
     # 'smth.png' file size is 2112 bits, so -> (2112 % 64) == 0
-    encrypt_file_full_file('smth.png', 'test1_encrypted.bin', input_key)             # encrypt file which (size % 64) == 0
-    decrypt_file_full_file('test1_encrypted.bin', 'test1_decrypted.png', input_key)  # decrypt file which (size % 64) == 0
+    encrypt_file_full_file('smth.png', 'test1_encrypted.bin', input_key)  # encrypt file which (size % 64) == 0
+    decrypt_file_full_file('test1_encrypted.bin', 'test1_decrypted.png',
+                           input_key)  # decrypt file which (size % 64) == 0
 
     message = bitarray("1111111110100011101000111010001110100011101000111010001110100011")
 
     print('Message - ' + str(message))
-    print("INTERNET Encrypt:" + '110100010010010100111101000011010000111000010010001001011101110') # Tak, nie ma początkowego zera
+    print(
+        "INTERNET Encrypt:" + '110100010010010100111101000011010000111000010010001001011101110')  # Tak, nie ma początkowego zera
 
     encrypted = encrypt_block(message, input_key)
     print("Encrypted: " + str(encrypted))
