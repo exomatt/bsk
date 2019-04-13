@@ -63,9 +63,10 @@ def f_function(bit_array, key):
 def encrypt_block(message_in, key):
     permuted_message = init_permutation(message_in)
     left_message, right_massage = spliHalf(permuted_message)
+    keys_list = keygenerator.generate_key(key)
     for i in range(16):
         temp_left = right_massage
-        generate_key = keygenerator.generate_key(key, i)
+        generate_key = keys_list[i]
         f_function_result = f_function(right_massage, generate_key)
         right_massage = left_message ^ f_function_result
         left_message = temp_left
@@ -90,4 +91,8 @@ if __name__ == '__main__':
     message = bitarray("1111111110100011101000111010001110100011101000111010001110100011")
     print("Encrypted: ")
     print("at internet fund this but it difrent than our :c :/ 0001 0011 0010 0001 0010 0100 1011 0111")
+    print("ON INTERNET RESULT:" + '110100010010010100111101000011010000111000010010001001011101110')
+
+    #Ucielo początkowe zero na internecie, ale wydaje mi sie ze nie ma to znaczenia. Działa
+
     print(encrypt_block(message, input_key))

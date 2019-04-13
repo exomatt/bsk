@@ -23,8 +23,6 @@ def generate_key(input):
         final_key = OwnBitarray()
         for i in range(len(des_key.PC2)):
             final_key.append(LR[des_key.PC2[i]-1])
-        print('-----'+ str(cycle_num) +'-------')
-        print(final_key)
         key_list_return.append(final_key)
 
     return key_list_return
