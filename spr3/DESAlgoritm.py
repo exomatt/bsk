@@ -1,8 +1,15 @@
 from bitarray import bitarray
+import binascii
+
+from tkinter import *
+from tkinter import ttk
 
 import spr2.readBinFile as readBinFile
 import spr3.DES as keygenerator
 import spr3.des_key as des_key
+
+width = 35
+widthS = 10
 
 
 # za parametr przyjmuje bitarray :)
@@ -71,7 +78,8 @@ def encrypt_block(message_in, key):
         f_function_result = f_function(right_massage, generate_key)
         right_massage = left_message ^ f_function_result
         left_message = temp_left
-    massage_after_iter = right_massage + left_message  # zamiana stron bo ostatni ma byc bez zamianay a petla domyslnie ostatenie tez zamieni miejscami x:D :P
+    massage_after_iter = right_massage + left_message  # zamiana stron bo ostatni ma byc bez zamianay a petla
+    # domyslnie ostatenie tez zamieni miejscami x:D :P
     result_encryption = inverse_permutation(massage_after_iter)
     return result_encryption
 
@@ -90,7 +98,8 @@ def decrypt_block(encrypted_message_in, key):
         right_massage = left_message ^ f_function_result
         left_message = temp_left
 
-    massage_after_iter = right_massage + left_message  # zamiana stron bo ostatni ma byc bez zamianay a petla domyslnie ostatenie tez zamieni miejscami x:D :P
+    massage_after_iter = right_massage + left_message  # zamiana stron bo ostatni ma byc bez zamianay a petla
+    # domyslnie ostatenie tez zamieni miejscami x:D :P
     result_decryption = inverse_permutation(massage_after_iter)
     return result_decryption
 
@@ -103,10 +112,10 @@ def encrypt_file_full_file(input_file, out, input_key):
     if file_lenght != 0:
         to_add = 64 - file_lenght + 63
         message_file += bitarray("1")
-        message_file += (to_add) * bitarray("0")
+        message_file += to_add * bitarray("0")
     else:
         message_file += bitarray("1")
-        message_file += (63) * bitarray("0")
+        message_file += 63 * bitarray("0")
 
     encrypted_message = bitarray()
     for block in range(int(len(message_file) / 64)):
@@ -140,7 +149,130 @@ def decrypt_file_full_file(input_encrypted_file, out, input_key):
     readBinFile.write_bin_file(out, message_copy)
 
 
+def makeform(root):
+    tab = ttk.Frame(root)
+
+    txt = Entry(tab, width=width)
+    txt.grid(column=0, row=0)
+    txt2 = Entry(tab, width=width)
+    txt2.grid(column=1, row=0)
+
+    def clicked():
+        var = StringVar()
+        if len(txt.get()) == 64 and len(txt2.get()) == 64:
+            res = encrypt_block(bitarray(txt.get()), bitarray(txt2.get()))
+            temp = bit_to_str(res)
+            var.set(temp)
+        else:
+            var.set("Inputs aren't 64 bits long")
+        # bitarray('0111001101011001101100100001011000111110010011101101110001011000')
+        lbl.configure(textvariable=var)
+
+    btn = Button(tab, text="Encrypt", command=clicked)
+    btn.grid(column=2, row=0)
+    lbl = Entry(tab, width=width)
+    lbl.grid(column=3, row=0)
+
+    txt3 = Entry(tab, width=width)
+    txt3.grid(column=0, row=1)
+    txt4 = Entry(tab, width=width)
+    txt4.grid(column=1, row=1)
+
+    def clicked2():
+        # res = decrypt_block(txt3.get(), txt4.get())
+        # var = StringVar()
+        # var.set(res)
+
+        var = StringVar()
+        if len(txt3.get()) == 64 and len(txt4.get()) == 64:
+            res = decrypt_block(bitarray(txt3.get()), bitarray(txt4.get()))
+            temp = bit_to_str(res)
+            var.set(temp)
+        else:
+            var.set("Inputs aren't 64 bits long")
+        lbl2.configure(textvariable=var)
+
+        var2 = StringVar()
+        a = txt.get() == lbl2.get()
+        b = txt.get() is lbl2.get()
+        var2.set(txt.get() == lbl2.get())
+        lbl3.configure(textvariable=var2)
+        # if lbl.get() is lbl2.get():
+        #     lbl3.configure(textvariable="True")
+        # else:
+        #     lbl3.configure(textvariable="False")
+
+    btn2 = Button(tab, text="Decrypt", command=clicked2)
+    btn2.grid(column=2, row=1)
+    lbl2 = Entry(tab, width=width)
+    lbl2.grid(column=3, row=1)
+    lbl3 = Entry(tab, width=widthS)
+    lbl3.grid(column=3, row=2)
+    return tab
+
+
+def makeform2(root):
+    tab = ttk.Frame(root)
+
+    txt = Entry(tab, width=width)
+    txt.grid(column=0, row=0)
+    txt2 = Entry(tab, width=width)
+    txt2.grid(column=1, row=0)
+    txt5 = Entry(tab, width=width)
+    txt5.grid(column=2, row=0)
+
+    def clicked():
+        var = StringVar()
+        if len(txt5.get()) == 16:
+            # temp = binascii.unhexlify(txt5.get())
+            temp = bin(int(txt5.get(), 16))[2:]
+            encrypt_file_full_file(txt.get(), txt2.get(), bitarray(temp))
+        else:
+            var.set("Keys aren't 64 bits long")
+        # bitarray('0111001101011001101100100001011000111110010011101101110001011000')
+
+    btn = Button(tab, text="Encrypt", command=clicked)
+    btn.grid(column=3, row=0)
+
+    txt3 = Entry(tab, width=width)
+    txt3.grid(column=0, row=1)
+    txt4 = Entry(tab, width=width)
+    txt4.grid(column=1, row=1)
+    txt6 = Entry(tab, width=width)
+    txt6.grid(column=2, row=1)
+
+    def clicked2():
+        var = StringVar()
+        if len(txt6.get()) == 16:
+            temp = bin(int(txt6.get(), 16))[2:]
+            decrypt_file_full_file(txt3.get(), txt4.get(), bitarray(temp))
+        else:
+            var.set("Keys aren't 64 bits long")
+        # lbl2.configure(textvariable=var)
+
+    btn2 = Button(tab, text="Decrypt", command=clicked2)
+    btn2.grid(column=3, row=1)
+    return tab
+
+
+def bit_to_str(arr):
+    out = ''
+    for bit in arr:
+        if bit:
+            out += '1'
+        elif not bit:
+            out += '0'
+    return out
+
+
 if __name__ == '__main__':
+    window = Tk()
+    window.title("DES Algorithm")
+    window.geometry('780x320')
+    tab_control = ttk.Notebook(window)
+
+    tab_control.add(makeform2(tab_control), text="DES File")
+    tab_control.add(makeform(tab_control), text="DES Text")
     # a = bitarray("1111111110100011101000111010001110100011101000111010001110100011")
     # barrayP = init_permutation(a)
     # print(barrayP)
@@ -155,18 +287,22 @@ if __name__ == '__main__':
     input_key = bitarray('1110011111000011111100001000011110100101110000111001011001101001')
 
     # 'smth.png' file size is 2112 bits, so -> (2112 % 64) == 0
-    encrypt_file_full_file('smth.png', 'test1_encrypted.bin', input_key)  # encrypt file which (size % 64) == 0
-    decrypt_file_full_file('test1_encrypted.bin', 'test1_decrypted.png',
-                           input_key)  # decrypt file which (size % 64) == 0
+    # encrypt_file_full_file('smth.png', 'test1_encrypted.bin', input_key)  # encrypt file which (size % 64) == 0
+    # decrypt_file_full_file('test1_encrypted.bin', 'test1_decrypted.png', input_key)
+    # decrypt file which (size % 64) == 0
 
     message = bitarray("1111111110100011101000111010001110100011101000111010001110100011")
 
     print('Message - ' + str(message))
     print(
-        "INTERNET Encrypt:" + '110100010010010100111101000011010000111000010010001001011101110')  # Tak, nie ma początkowego zera
+        "INTERNET Encrypt:" + '110100010010010100111101000011010000111000010010001001011101110')  # Tak, nie ma
+    # początkowego zera
 
     encrypted = encrypt_block(message, input_key)
     print("Encrypted: " + str(encrypted))
 
     decrypted = decrypt_block(encrypted, input_key)
     print("Decrypted: " + str(decrypted))
+
+    tab_control.pack(expand=1, fill='both')
+    window.mainloop()

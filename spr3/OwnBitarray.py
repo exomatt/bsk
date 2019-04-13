@@ -1,5 +1,6 @@
 from bitarray import bitarray
 
+
 # The same as bitarray(), but support bits shifting
 class OwnBitarray(bitarray):
 
@@ -14,5 +15,5 @@ class OwnBitarray(bitarray):
     def __repr__(self):
         return "{}('{}')".format(type(self).__name__, self.to01())
 
-    #def addown(self, other):
-#        return type(self)('') *
+    # def addown(self, other):
+    #    return type(self)('') *
