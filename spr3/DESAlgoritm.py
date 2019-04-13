@@ -129,12 +129,10 @@ def decrypt_file_full_file(input_encrypted_file, out, input_key):
         decrypted_message += block_decrypted_message
 
     # delete padding
-    print(decrypted_message)
     decrypted_message.reverse()
-    print(decrypted_message)
     message_copy = decrypted_message.copy()
     for num in range(len(decrypted_message)):
-        if (decrypted_message[num] == 1):
+        if decrypted_message[num] == 1:
             message_copy.pop(0)
             break
         message_copy.pop(0)
