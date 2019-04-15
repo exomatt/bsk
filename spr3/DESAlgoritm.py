@@ -1,5 +1,5 @@
 from bitarray import bitarray
-import binascii
+import datetime
 
 from tkinter import *
 from tkinter import ttk
@@ -160,9 +160,11 @@ def makeform(root):
     def clicked():
         var = StringVar()
         if len(txt.get()) == 64 and len(txt2.get()) == 64:
+            print("Start")
             res = encrypt_block(bitarray(txt.get()), bitarray(txt2.get()))
             temp = bit_to_str(res)
             var.set(temp)
+            print("Done")
         else:
             var.set("Inputs aren't 64 bits long")
         # bitarray('0111001101011001101100100001011000111110010011101101110001011000')
@@ -185,9 +187,11 @@ def makeform(root):
 
         var = StringVar()
         if len(txt3.get()) == 64 and len(txt4.get()) == 64:
+            print("Start")
             res = decrypt_block(bitarray(txt3.get()), bitarray(txt4.get()))
             temp = bit_to_str(res)
             var.set(temp)
+            print("Done")
         else:
             var.set("Inputs aren't 64 bits long")
         lbl2.configure(textvariable=var)
@@ -223,13 +227,20 @@ def makeform2(root):
 
     def clicked():
         var = StringVar()
-        if len(txt5.get()) == 16:
-            # temp = binascii.unhexlify(txt5.get())
-            temp = bin(int(txt5.get(), 16))[2:]
+        if len(txt5.get()) == 64:
+            print("Start")
+            time=datetime.datetime.now()
+            temp = txt5.get()
+            # temp = bin(int(txt5.get(), 16))[2:]
             encrypt_file_full_file(txt.get(), txt2.get(), bitarray(temp))
+            print("Done. Time:" + str(datetime.datetime.now()-time))
+            print("Done")
         else:
-            var.set("Keys aren't 64 bits long")
+            print("Keys aren't 64 bits long")
         # bitarray('0111001101011001101100100001011000111110010011101101110001011000')
+
+    # TODO Add  functiom that preps input. Change from hex to bin. Cut if longer than 64-bit. Fill with zeros if
+    # shorter.
 
     btn = Button(tab, text="Encrypt", command=clicked)
     btn.grid(column=3, row=0)
@@ -244,10 +255,13 @@ def makeform2(root):
     def clicked2():
         var = StringVar()
         if len(txt6.get()) == 16:
+            print("Start")
+            time=datetime.datetime.now()
             temp = bin(int(txt6.get(), 16))[2:]
             decrypt_file_full_file(txt3.get(), txt4.get(), bitarray(temp))
+            print("Done. Time:" + str(datetime.datetime.now() - time))
         else:
-            var.set("Keys aren't 64 bits long")
+            print("Keys aren't 64 bits long")
         # lbl2.configure(textvariable=var)
 
     btn2 = Button(tab, text="Decrypt", command=clicked2)
@@ -298,11 +312,11 @@ if __name__ == '__main__':
         "INTERNET Encrypt:" + '110100010010010100111101000011010000111000010010001001011101110')  # Tak, nie ma
     # początkowego zera
 
-    encrypted = encrypt_block(message, input_key)
-    print("Encrypted: " + str(encrypted))
-
-    decrypted = decrypt_block(encrypted, input_key)
-    print("Decrypted: " + str(decrypted))
+    # encrypted = encrypt_block(message, input_key)
+    # print("Encrypted: " + str(encrypted))
+    #
+    # decrypted = decrypt_block(encrypted, input_key)
+    # print("Decrypted: " + str(decrypted))
 
     tab_control.pack(expand=1, fill='both')
     window.mainloop()
