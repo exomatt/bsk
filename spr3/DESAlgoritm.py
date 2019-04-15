@@ -1,8 +1,8 @@
-from bitarray import bitarray
 import datetime
-
 from tkinter import *
 from tkinter import ttk
+
+from bitarray import bitarray
 
 import spr2.readBinFile as readBinFile
 import spr3.DES as keygenerator
@@ -161,7 +161,7 @@ def makeform(root):
         var = StringVar()
         if len(txt.get()) == 64 and len(txt2.get()) == 64:
             print("Start")
-            res = encrypt_block(bitarray(txt.get()), bitarray(txt2.get()))
+            res = encrypt_block(bitarray(txt.get()), bitarray(prep_input(txt2.get())))
             temp = bit_to_str(res)
             var.set(temp)
             print("Done")
@@ -188,7 +188,7 @@ def makeform(root):
         var = StringVar()
         if len(txt3.get()) == 64 and len(txt4.get()) == 64:
             print("Start")
-            res = decrypt_block(bitarray(txt3.get()), bitarray(txt4.get()))
+            res = decrypt_block(bitarray(txt3.get()), bitarray(prep_input(txt4.get())))
             temp = bit_to_str(res)
             var.set(temp)
             print("Done")
@@ -226,21 +226,10 @@ def makeform2(root):
     txt5.grid(column=2, row=0)
 
     def clicked():
-        var = StringVar()
-        if len(txt5.get()) == 64:
-            print("Start")
-            time=datetime.datetime.now()
-            temp = txt5.get()
-            # temp = bin(int(txt5.get(), 16))[2:]
-            encrypt_file_full_file(txt.get(), txt2.get(), bitarray(temp))
-            print("Done. Time:" + str(datetime.datetime.now()-time))
-            print("Done")
-        else:
-            print("Keys aren't 64 bits long")
-        # bitarray('0111001101011001101100100001011000111110010011101101110001011000')
-
-    # TODO Add  functiom that preps input. Change from hex to bin. Cut if longer than 64-bit. Fill with zeros if
-    # shorter.
+        print("Start")
+        time = datetime.datetime.now()
+        encrypt_file_full_file(txt.get(), txt2.get(), bitarray(prep_input(txt5.get())))
+        print("Done. Time:" + str(datetime.datetime.now() - time))
 
     btn = Button(tab, text="Encrypt", command=clicked)
     btn.grid(column=3, row=0)
@@ -253,20 +242,30 @@ def makeform2(root):
     txt6.grid(column=2, row=1)
 
     def clicked2():
-        var = StringVar()
-        if len(txt6.get()) == 16:
-            print("Start")
-            time=datetime.datetime.now()
-            temp = bin(int(txt6.get(), 16))[2:]
-            decrypt_file_full_file(txt3.get(), txt4.get(), bitarray(temp))
-            print("Done. Time:" + str(datetime.datetime.now() - time))
-        else:
-            print("Keys aren't 64 bits long")
+        print("Start")
+        time = datetime.datetime.now()
+        decrypt_file_full_file(txt3.get(), txt4.get(), bitarray(prep_input(txt6.get())))
+        print("Done. Time:" + str(datetime.datetime.now() - time))
+
         # lbl2.configure(textvariable=var)
 
     btn2 = Button(tab, text="Decrypt", command=clicked2)
     btn2.grid(column=3, row=1)
     return tab
+
+    # TODO Add  functiom that preps input. Change from hex to bin. Cut if longer than 64-bit. Fill with zeros if
+    # shorter.
+
+
+def prep_input(msg):
+    temp = bin(int(msg, 16))[2:]
+    if len(temp) > 64:
+        temp = temp[len(temp) - 64:]
+    else:
+        while len(temp) < 64:
+            temp = '0' + temp
+    print("len(temp): " + str(len(temp)) + ", temp: " + str(temp))
+    return temp
 
 
 def bit_to_str(arr):
